@@ -1,6 +1,6 @@
 // Teacher dashboard — re-teach priority, class comparisons, support list
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { ratioMatrix } from '../loader.js?v=5';
 import { explain, helpBox, howToRead } from '../help.js?v=5';
@@ -141,7 +141,7 @@ function build(td) {
     ['生徒管理コード', '氏名', 'クラス', '番号', '合計点', 'Z', '重要項目得点率'],
     support.slice(0, nShow).map(s => [
       s.r['生徒管理コード'] || '—',
-      s.r['氏名'] || '—',
+      displayName(s.r['氏名'], s.i, s.r['生徒管理コード']),
       s.r['クラス'] ?? '—',
       s.r['番号'] ?? '—',
       s.r['合計点'] ?? '—',
@@ -174,7 +174,7 @@ function build(td) {
         '要支援生徒': {
           headers: ['生徒管理コード', '氏名', 'クラス', '番号', '合計点', 'Z', '重要項目得点率'],
           rows: support.slice(0, 30).map(s => [
-            s.r['生徒管理コード'], s.r['氏名'], s.r['クラス'], s.r['番号'],
+            s.r['生徒管理コード'], displayName(s.r['氏名'], s.i, s.r['生徒管理コード']), s.r['クラス'], s.r['番号'],
             s.r['合計点'], s.z, s.focusRate,
           ]),
         },

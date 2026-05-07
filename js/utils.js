@@ -52,6 +52,10 @@ export function renderTable(headers, rows, opts = {}) {
       if (typeof v === 'number' && Number.isFinite(v)) {
         td.classList.add('num');
         td.textContent = opts.fmt ? opts.fmt(v) : (Number.isInteger(v) ? String(v) : v.toFixed(3));
+      } else if (typeof v === 'number') {
+        // NaN / Infinity → em dash
+        td.classList.add('num');
+        td.textContent = '—';
       } else {
         td.textContent = v == null ? '—' : String(v);
       }
@@ -231,3 +235,25 @@ export function cronbachAlpha(matrix) {
 // ---------- Format ----------
 export function fmtPct(v) { return Number.isFinite(v) ? `${(v * 100).toFixed(1)}%` : '—'; }
 export function fmtNum(v, d = 2) { return Number.isFinite(v) ? v.toFixed(d) : '—'; }
+
+// ---------- Anonymize ----------
+// Returns the displayable name. If anonymize mode is on, returns 生徒A/B/...
+// idx: stable index (e.g. row index in the dataset). Use 生徒管理コード as
+// fallback to keep mapping stable across re-renders.
+export function displayName(originalName, idx, fallbackKey) {
+  const anon = !!(window._appState && window._appState.anonymize);
+  if (!anon) return originalName || '—';
+  // Stable mapping: if fallbackKey present, hash it to a small int
+  let n = idx;
+  if (n == null && fallbackKey) {
+    let h = 0;
+    const s = String(fallbackKey);
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    n = Math.abs(h);
+  }
+  if (n == null) return '生徒';
+  const i = parseInt(n, 10);
+  if (i < 26) return `生徒${String.fromCharCode(65 + i)}`;
+  if (i < 26 * 27) return `生徒${String.fromCharCode(65 + Math.floor(i / 26) - 1)}${String.fromCharCode(65 + (i % 26))}`;
+  return `生徒${i}`;
+}

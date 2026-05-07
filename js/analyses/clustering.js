@@ -1,6 +1,6 @@
 // Clustering — discover learner archetypes
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { ratioMatrix } from '../loader.js?v=5';
 import { kmeans, pca2, standardize } from '../ml.js?v=5';
@@ -138,7 +138,7 @@ function build(td, k, doStd) {
       marker: { size: 9, color: PALETTE[c % PALETTE.length], opacity: 0.8 },
       text: idxs.map(i => {
         const r = td.rows[validIdx[i]];
-        return `${r['氏名'] || ''} (クラス${r['クラス'] || '?'})`;
+        return `${displayName(r['氏名'], validIdx[i], r['生徒管理コード'])} (クラス${r['クラス'] || '?'})`;
       }),
       hoverinfo: 'text',
     };
@@ -163,7 +163,7 @@ function build(td, k, doStd) {
       const r = td.rows[i];
       return [
         r['生徒管理コード'] || '—',
-        r['氏名'] || '—',
+        displayName(r['氏名'], i, r['生徒管理コード']),
         r['クラス'] ?? '—',
         r['番号'] ?? '—',
         r['合計点'] ?? '—',

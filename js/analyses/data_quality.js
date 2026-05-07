@@ -1,6 +1,6 @@
 // Data Quality — sanity-check the loaded Excel before analyzing
 // =========================================================================
-import { el, kpi, renderTable, mean, stdev, fmtPct, fmtNum, downloadCSV } from '../utils.js?v=5';
+import { el, kpi, renderTable, mean, stdev, fmtPct, fmtNum, downloadCSV, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { helpBox } from '../help.js?v=5';
 
@@ -120,7 +120,7 @@ function build(td) {
       ['生徒管理コード', '氏名', 'クラス', '番号', '欠損項目'],
       missingStudents.slice(0, 50).map(r => [
         r['生徒管理コード'] || '—',
-        r['氏名'] || '—',
+        displayName(r['氏名'], null, r['生徒管理コード']),
         r['クラス'] ?? '—',
         r['番号'] ?? '—',
         itemNames.filter(c => !Number.isFinite(r[c])).join(', '),
@@ -138,7 +138,7 @@ function build(td) {
     out.appendChild(renderTable(
       ['生徒管理コード', '氏名', '入力された合計点', '小計の合計', '差'],
       mismatches.slice(0, 50).map(m => [
-        m.code || '—', m.name || '—',
+        m.code || '—', displayName(m.name, null, m.code),
         fmtNum(m.reported, 1),
         fmtNum(m.sum, 1),
         { v: fmtNum(m.diff, 1), cls: 'bad' },
@@ -153,7 +153,7 @@ function build(td) {
     out.appendChild(renderTable(
       ['生徒管理コード', '氏名', '項目', '入力値', '配点'],
       outOfRange.slice(0, 50).map(o => [
-        o.code || '—', o.name || '—', o.item,
+        o.code || '—', displayName(o.name, null, o.code), o.item,
         { v: fmtNum(o.value, 1), cls: 'bad' },
         o.max || '—',
       ])
@@ -167,7 +167,7 @@ function build(td) {
     out.appendChild(renderTable(
       ['生徒管理コード', '氏名', '項目', '得点', 'Z'],
       outlierRows.slice(0, 50).map(o => [
-        o.code || '—', o.name || '—', o.item,
+        o.code || '—', displayName(o.name, null, o.code), o.item,
         fmtNum(o.value, 1),
         { v: fmtNum(o.z, 2), cls: Math.abs(o.z) > 4 ? 'bad' : 'warn' },
       ])
@@ -189,7 +189,7 @@ function build(td) {
     out.appendChild(renderTable(
       ['生徒管理コード', '氏名', 'クラス'],
       allZeroStudents.slice(0, 30).map(r => [
-        r['生徒管理コード'] || '—', r['氏名'] || '—', r['クラス'] ?? '—'
+        r['生徒管理コード'] || '—', displayName(r['氏名'], null, r['生徒管理コード']), r['クラス'] ?? '—'
       ])
     ));
   }

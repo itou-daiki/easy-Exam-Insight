@@ -1,6 +1,6 @@
 // Longitudinal — compare across multiple tests
 // =========================================================================
-import { el, plotEl, renderTable, mean, stdev, fmtNum } from '../utils.js?v=5';
+import { el, plotEl, renderTable, mean, stdev, fmtNum, displayName } from '../utils.js?v=5';
 import { explain, helpBox, howToRead } from '../help.js?v=5';
 
 export function render(container, state) {
@@ -34,7 +34,7 @@ export function render(container, state) {
     const previouslySelected = new Set(Array.from(studentSelect.selectedOptions).map(o => o.value));
     studentSelect.innerHTML = '';
     students.forEach(({ code, name }) => {
-      const opt = el('option', { value: code }, `${name} (${code})`);
+      const opt = el('option', { value: code }, `${displayName(name, null, code)} (${code})`);
       if (previouslySelected.has(code)) opt.selected = true;
       studentSelect.appendChild(opt);
     });
@@ -128,7 +128,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         div.appendChild(el('h4', null, '🚀 大きく伸びた生徒 Top 10'));
         div.appendChild(renderTable(
           ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
-          risers.map(r => [r.name, r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
+          risers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
             { v: `+${fmtNum(r.dz, 2)}`, cls: 'good' }])
         ));
         return div;
@@ -138,7 +138,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         div.appendChild(el('h4', null, '🚨 大きく落ちた生徒 Top 10（要面談）'));
         div.appendChild(renderTable(
           ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
-          fallers.map(r => [r.name, r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
+          fallers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
             { v: fmtNum(r.dz, 2), cls: 'bad' }])
         ));
         return div;
@@ -150,7 +150,7 @@ function build(tests, selectedSids, onStudentsResolved) {
     if (chronic.length) {
       out.appendChild(renderTable(
         ['氏名', '生徒管理コード', ...tests.map(t => `Z(${t.test_id})`)],
-        chronic.map(s => [s.name, s.code, ...tests.map(t => fmtNum(s.byTest[t.test_id].z, 2))])
+        chronic.map((s, i) => [displayName(s.name, i, s.code), s.code, ...tests.map(t => fmtNum(s.byTest[t.test_id].z, 2))])
       ));
       out.appendChild(el('div', { class: 'callout warn' },
         `${chronic.length}名が全テストで学年下位（Z<-1）に該当。早期介入を推奨。`));
@@ -188,7 +188,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         d.appendChild(el('h4', null, '📈 予測上位 10名'));
         d.appendChild(renderTable(
           ['氏名', '直近合計点', '予測合計点', '傾向'],
-          top10.map(s => [s.name, fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
+          top10.map((s, i) => [displayName(s.name, i, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
             { v: s.slope > 0 ? '↑ 上昇' : (s.slope < 0 ? '↓ 下降' : '→ 横這い'),
               cls: s.slope > 0 ? 'good' : (s.slope < 0 ? 'bad' : '') }])
         ));
@@ -199,7 +199,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         d.appendChild(el('h4', null, '📉 予測下位 10名（要支援）'));
         d.appendChild(renderTable(
           ['氏名', '直近合計点', '予測合計点', '傾向'],
-          bot10.map(s => [s.name, fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
+          bot10.map((s, i) => [displayName(s.name, i, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
             { v: s.slope > 0 ? '↑ 上昇' : (s.slope < 0 ? '↓ 下降' : '→ 横這い'),
               cls: s.slope > 0 ? 'good' : (s.slope < 0 ? 'bad' : '') }])
         ));
@@ -218,7 +218,7 @@ function build(tests, selectedSids, onStudentsResolved) {
       return {
         x: tests.map(t => t.test_id),
         y: tests.map(t => ent.byTest[t.test_id]?.z ?? null),
-        name: ent.name,
+        name: displayName(ent.name, null, code),
         type: 'scatter',
         mode: 'lines+markers',
       };

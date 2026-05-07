@@ -1,6 +1,6 @@
 // Summary — one-page executive overview across all loaded tests
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX, displayName } from '../utils.js?v=5';
 import { ratioMatrix } from '../loader.js?v=5';
 import { helpBox } from '../help.js?v=5';
 
@@ -154,8 +154,8 @@ export function render(container, state) {
         d.appendChild(el('h4', null, '🚀 伸び TOP 5'));
         d.appendChild(renderTable(
           ['氏名', '初回Z', '直近Z', 'ΔZ'],
-          dz.slice(0, 5).map(e => [
-            e.name || '—',
+          dz.slice(0, 5).map((e, i) => [
+            displayName(e.name, i, e.code),
             fmtNum(e.byTest[tests[0].test_id], 2),
             fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
             { v: `+${e.delta.toFixed(2)}`, cls: 'good' },
@@ -168,8 +168,8 @@ export function render(container, state) {
         d.appendChild(el('h4', null, '🚨 低下 TOP 5（要面談）'));
         d.appendChild(renderTable(
           ['氏名', '初回Z', '直近Z', 'ΔZ'],
-          dz.slice(-5).reverse().map(e => [
-            e.name || '—',
+          dz.slice(-5).reverse().map((e, i) => [
+            displayName(e.name, dz.length-1-i, e.code),
             fmtNum(e.byTest[tests[0].test_id], 2),
             fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
             { v: e.delta.toFixed(2), cls: 'bad' },
@@ -201,7 +201,7 @@ export function render(container, state) {
       tests.every(t => e.byTest[t.test_id] != null && e.byTest[t.test_id] < -1)
     );
     if (chronic.length) {
-      actions.push(`持続的に下位の生徒 ${chronic.length}名（${chronic.slice(0, 3).map(e => e.name).join('・')} 等）に個別の声かけ・面談を実施`);
+      actions.push(`持続的に下位の生徒 ${chronic.length}名（${chronic.slice(0, 3).map((e, i) => displayName(e.name, i, e.code)).join('・')} 等）に個別の声かけ・面談を実施`);
     }
   }
   const veryHard = priorityList.filter(p => p.rate < 0.3);

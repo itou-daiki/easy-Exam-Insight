@@ -1,6 +1,6 @@
 // Per-student feedback — personal report with auto-generated coaching
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, fmtPct, fmtNum } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, mean, stdev, fmtPct, fmtNum, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { ratioMatrix } from '../loader.js?v=5';
 import { explain, helpBox, howToRead } from '../help.js?v=5';
@@ -18,7 +18,7 @@ export function render(container, state) {
     tdCurrent.rows.forEach((r, i) => {
       const cls = r['クラス'] ?? '?';
       const no = r['番号'] ?? '?';
-      const name = r['氏名'] ?? '(no name)';
+      const name = displayName(r['氏名'], i, r['生徒管理コード']);
       studentSelect.appendChild(el('option', { value: i },
         `${cls}-${String(no).padStart(2, ' ')} ${name}`));
     });
@@ -79,7 +79,7 @@ function build(td, idx) {
   const rank = Number.isFinite(total) ? peers.filter(p => Number.isFinite(p['合計点']) && p['合計点'] > total).length + 1 : NaN;
 
   out.appendChild(el('div', { class: 'kpi-row' },
-    kpi('氏名', r['氏名'] || '—', r['生徒管理コード'] || ''),
+    kpi('氏名', displayName(r['氏名'], idx, r['生徒管理コード']), r['生徒管理コード'] || ''),
     kpi('クラス・番号', `${r['クラス'] ?? '?'}-${r['番号'] ?? '?'}`),
     kpi('合計点', Number.isFinite(total) ? total.toFixed(0) : '—',
         `クラス比 ${Number.isFinite(total) ? (total - mean(totals)).toFixed(1) : '—'}`),
@@ -95,7 +95,7 @@ function build(td, idx) {
         r: [...myRatios, myRatios[0]],
         theta: [...td.items.map(i => i.name), td.items[0].name],
         fill: 'toself',
-        name: r['氏名'] || '生徒',
+        name: displayName(r['氏名'], idx, r['生徒管理コード']) || '生徒',
         line: { color: '#1e90ff' },
       },
       {
@@ -198,7 +198,7 @@ function build(td, idx) {
       similar.map(x => {
         const rr = td.rows[x.i];
         return [
-          rr['氏名'] || '—',
+          displayName(rr['氏名'], x.i, rr['生徒管理コード']),
           rr['クラス'] ?? '—',
           rr['合計点'] ?? '—',
           fmtNum(x.d, 3),
@@ -228,7 +228,7 @@ function build(td, idx) {
       candidates.map(c => {
         const rr = td.rows[c.i];
         return [
-          rr['氏名'] || '—',
+          displayName(rr['氏名'], c.i, rr['生徒管理コード']),
           rr['クラス'] ?? '—',
           fmtNum(c.score, 3),
           weakIdxs.map(j => `${td.items[j].name}: ${fmtPct(ratiosFull[c.i][j])}`).join(' / '),
@@ -252,7 +252,7 @@ function build(td, idx) {
 }
 
 function generateCoachingText(student, strengths, weaknesses, lowAbs, z, rank, peerN) {
-  const name = student['氏名'] || '生徒';
+  const name = displayName(student['氏名'], null, student['生徒管理コード']) || '生徒';
   const lines = [];
   lines.push(`${name}さんへ — 今回のテストの結果を、データから読み解いてみました。`);
   lines.push('');
