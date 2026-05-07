@@ -1,6 +1,6 @@
 // Longitudinal — compare across multiple tests
 // =========================================================================
-import { el, plotEl, renderTable, mean, stdev, fmtNum, displayName } from '../utils.js?v=5';
+import { el, plotEl, renderTable, mean, stdev, fmtNum, displayName, downloadXLSX } from '../utils.js?v=5';
 import { explain, helpBox, howToRead } from '../help.js?v=5';
 
 export function render(container, state) {
@@ -233,6 +233,31 @@ function build(tests, selectedSids, onStudentsResolved) {
       height: 420, margin: { t: 20 },
     }));
   }
+
+  // Excel download
+  out.appendChild(el('h3', null, '📥 縦断レポート Excel ダウンロード'));
+  out.appendChild(el('button', {
+    class: 'btn primary',
+    onclick: () => {
+      const sheets = {
+        '考査別サマリー': {
+          headers: ['考査', '受験者数', '平均', '中央値', 'SD'],
+          rows: stats.map(s => [s.test, s.n, s.mean, s.median, s.sd]),
+        },
+      };
+      if (typeof ranked !== 'undefined' && ranked && ranked.length) {
+        sheets['Z軌跡'] = {
+          headers: ['氏名', '生徒管理コード', ...tests.map(t => `Z(${t.test_id})`), 'ΔZ'],
+          rows: ranked.map(s => [
+            displayName(s.name, null, s.code), s.code,
+            ...tests.map(t => s.byTest[t.test_id]?.z),
+            s.dz,
+          ]),
+        };
+      }
+      downloadXLSX(`縦断比較_${tests[0].test_id}_to_${tests[tests.length-1].test_id}.xlsx`, sheets);
+    },
+  }, el('i', { class: 'fas fa-file-excel' }), ' 縦断レポートExcelをダウンロード'));
 
   return out;
 }

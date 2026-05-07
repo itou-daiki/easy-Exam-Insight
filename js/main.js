@@ -308,13 +308,47 @@ async function showAnalysis(type) {
   }
 }
 
-backBtn.addEventListener('click', () => {
+function goHome() {
   analysisSection.classList.add('hidden');
   uploadSection.style.display = '';
   featureSection.style.display = '';
   clear(analysisContent);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+backBtn.addEventListener('click', goHome);
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !analysisSection.classList.contains('hidden')) {
+    goHome();
+    return;
+  }
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    uploadArea.scrollIntoView({ behavior: 'smooth' });
+    fileInput.click();
+  }
 });
+
+// Programmatic navigation helpers (used by 'click row -> open student' pattern)
+window.showAnalysisFromCode = function(typeKey) {
+  if (ANALYSIS_TITLES[typeKey]) showAnalysis(typeKey);
+};
+window.jumpToStudent = function(studentCode) {
+  if (!studentCode) return;
+  showAnalysis('student_feedback');
+  setTimeout(() => {
+    const sel = analysisContent.querySelector('select');
+    if (!sel) return;
+    for (const opt of sel.options) {
+      if (opt.textContent.includes(studentCode)) {
+        sel.value = opt.value;
+        sel.dispatchEvent(new Event('change'));
+        break;
+      }
+    }
+  }, 400);
+};
 
 renderLoadedTests();
 updateFeatureCards();

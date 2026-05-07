@@ -38,6 +38,7 @@ function build(td) {
     kpi('SD合計点', totals.length ? fmtNum(stdev(totals), 2) : '—'),
   ));
 
+  out.appendChild(explain('zScore'));
   out.appendChild(el('h3', null, '📊 要約統計'));
   const cols = [...td.domain_cols, ...td.items.map(i => i.name)];
   const summaryRows = cols.map(c => {
