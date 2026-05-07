@@ -1,9 +1,9 @@
 // Shared UI + math helpers
 // =========================================================================
 
-export function el(tag, props = {}, ...children) {
+export function el(tag, props, ...children) {
   const e = document.createElement(tag);
-  Object.entries(props).forEach(([k, v]) => {
+  Object.entries(props || {}).forEach(([k, v]) => {
     if (k === 'class' || k === 'className') e.className = v;
     else if (k === 'style' && typeof v === 'object') Object.assign(e.style, v);
     else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2).toLowerCase(), v);
