@@ -1,8 +1,8 @@
 // Teacher dashboard — re-teach priority, class comparisons, support list
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js';
-import { singlePicker } from '../picker.js';
-import { ratioMatrix } from '../loader.js';
+import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=3';
+import { singlePicker } from '../picker.js?v=3';
+import { ratioMatrix } from '../loader.js?v=3';
 
 export function render(container, state) {
   const wrap = el('div');

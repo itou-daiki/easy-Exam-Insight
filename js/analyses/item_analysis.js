@@ -1,7 +1,7 @@
 // Item analysis (Classical Test Theory)
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, corr, cronbachAlpha, fmtNum, downloadXLSX } from '../utils.js';
-import { singlePicker } from '../picker.js';
+import { el, kpi, plotEl, renderTable, mean, stdev, corr, cronbachAlpha, fmtNum, downloadXLSX } from '../utils.js?v=3';
+import { singlePicker } from '../picker.js?v=3';
 
 export function render(container, state) {
   const wrap = el('div');

@@ -1,6 +1,6 @@
 // Longitudinal — compare across multiple tests
 // =========================================================================
-import { el, plotEl, renderTable, mean, stdev, fmtNum } from '../utils.js';
+import { el, plotEl, renderTable, mean, stdev, fmtNum } from '../utils.js?v=3';
 
 export function render(container, state) {
   const wrap = el('div');
