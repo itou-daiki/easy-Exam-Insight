@@ -122,6 +122,7 @@ function build(td, idx) {
     const diff = cl - my;
     return [
       it.name,
+      it.unit_name || '—',
       it.domain || '—',
       r[it.name] ?? '—',
       it.max_score || '—',
@@ -133,7 +134,7 @@ function build(td, idx) {
     ];
   });
   out.appendChild(renderTable(
-    ['項目', '領域', '得点', '配点', '得点率', 'クラス平均', '学年平均', '差(クラス-自分)'],
+    ['項目', '単元', '領域', '得点', '配点', '得点率', 'クラス平均', '学年平均', '差(クラス-自分)'],
     detailRows,
   ));
 

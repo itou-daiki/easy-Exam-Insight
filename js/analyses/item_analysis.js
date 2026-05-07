@@ -68,6 +68,7 @@ function build(td) {
   out.appendChild(explain('alpha'));
 
   out.appendChild(el('h3', null, '📋 項目分析テーブル'));
+  const hasUnits = td.items.some(it => it.unit_name);
   const rows = td.items.map(it => {
     const v = df.map(r => r[it.name]).filter(Number.isFinite);
     const denom = it.max_score || Math.max(...v, 1);
@@ -76,6 +77,7 @@ function build(td) {
     const d = d_index[it.name];
     return [
       it.name,
+      ...(hasUnits ? [it.unit_name || '—'] : []),
       it.domain || '—',
       it.max_score || '—',
       fmtNum(mean(v), 2),
@@ -85,7 +87,10 @@ function build(td) {
       { v: fmtNum(d, 3), cls: !Number.isFinite(d) ? '' : (d < 0.2 ? 'bad' : (d >= 0.4 ? 'good' : '')) },
     ];
   });
-  out.appendChild(renderTable(['項目', '領域', '配点', '平均', 'SD', '困難度 p', '項目-合計相関', 'D指数'], rows));
+  out.appendChild(renderTable(
+    ['項目', ...(hasUnits ? ['単元'] : []), '領域', '配点', '平均', 'SD', '困難度 p', '項目-合計相関', 'D指数'],
+    rows,
+  ));
   out.appendChild(el('div', { class: 'callout info' },
     '📌 ',
     el('strong', null, '困難度 p'),
@@ -152,7 +157,7 @@ function build(td) {
       class: 'btn primary',
       onclick: () => downloadXLSX(`item_analysis_${td.test_id}.xlsx`, {
         '項目分析': {
-          headers: ['項目', '領域', '配点', '平均', 'SD', '困難度 p', '項目-合計相関', 'D指数'],
+          headers: ['項目', ...(hasUnits ? ['単元'] : []), '領域', '配点', '平均', 'SD', '困難度 p', '項目-合計相関', 'D指数'],
           rows,
         },
       }),

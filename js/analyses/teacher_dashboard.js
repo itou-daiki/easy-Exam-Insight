@@ -47,6 +47,7 @@ function build(td) {
     priorityRows.push({
       name: it.name,
       domain: it.domain,
+      unit_name: it.unit_name,
       rate, r, score,
       ach: ratios.filter(row => row[j] >= 0.6).length,
       noAch: ratios.filter(row => row[j] < 0.6).length,
@@ -54,9 +55,10 @@ function build(td) {
   }
   priorityRows.sort((a, b) => b.score - a.score);
   out.appendChild(renderTable(
-    ['項目', '領域', '全体得点率', '識別力', '再指導優先度', '達成生徒数(≥60%)', '未達成生徒数(<60%)'],
+    ['項目', '単元', '領域', '全体得点率', '識別力', '再指導優先度', '達成生徒数(≥60%)', '未達成生徒数(<60%)'],
     priorityRows.map(p => [
       p.name,
+      p.unit_name || '—',
       p.domain || '—',
       fmtPct(p.rate),
       fmtNum(p.r, 3),
@@ -166,8 +168,8 @@ function build(td) {
       class: 'btn primary',
       onclick: () => downloadXLSX(`teacher_report_${td.test_id}.xlsx`, {
         '再指導優先度': {
-          headers: ['項目', '領域', '全体得点率', '識別力', '再指導優先度', '達成', '未達成'],
-          rows: priorityRows.map(p => [p.name, p.domain || '', p.rate, p.r, p.score, p.ach, p.noAch]),
+          headers: ['項目', '単元', '領域', '全体得点率', '識別力', '再指導優先度', '達成', '未達成'],
+          rows: priorityRows.map(p => [p.name, p.unit_name || '', p.domain || '', p.rate, p.r, p.score, p.ach, p.noAch]),
         },
         '要支援生徒': {
           headers: ['生徒管理コード', '氏名', 'クラス', '番号', '合計点', 'Z', '重要項目得点率'],

@@ -101,7 +101,7 @@ function build(td) {
     grid.appendChild(plotEl(
       [{ x: vals, type: 'histogram', marker: { color: '#06b6d4' }, nbinsx: nbins }],
       {
-        title: { text: `${it.name}${it.max_score ? ` (配点 ${it.max_score})` : ''}`, font: { size: 13 } },
+        title: { text: `${it.unit_name ? `[${it.unit_name}] ` : ''}${it.name}${it.max_score ? ` (配点 ${it.max_score})` : ''}`, font: { size: 13 } },
         height: 240, margin: { l: 40, r: 20, t: 36, b: 32 },
       }
     ));
