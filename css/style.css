@@ -31,8 +31,8 @@ body {
     padding: 2rem;
 }
 
-/* ===== Hero ===== */
-.hero-section, .hero {
+/* ===== Hero (easy_stat_edu 完全互換) ===== */
+.hero-section {
     background: var(--primary-color);
     border-radius: 24px;
     padding: 3rem 2rem;
@@ -43,7 +43,7 @@ body {
     position: relative;
     overflow: hidden;
 }
-.hero-section::before, .hero::before {
+.hero-section::before {
     content: '';
     position: absolute;
     top: -50%; right: -50%;
@@ -55,18 +55,29 @@ body {
     0%,100% { transform: scale(1); opacity: 0.5; }
     50% { transform: scale(1.1); opacity: 0.3; }
 }
-.hero-inner { position: relative; z-index: 1; }
-.hero-title, .hero h1 {
-    font-size: 3.5rem; font-weight: 700;
-    margin-bottom: 0.5rem; letter-spacing: -0.02em;
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative; z-index: 1;
 }
-.hero h1 i { margin-right: 0.5rem; }
-.hero-subtitle, .hero p {
-    font-size: 1.15rem; font-weight: 300;
-    opacity: 0.95; position: relative; z-index: 1;
-    line-height: 1.5;
+.hero-caption {
+    font-size: 0.95rem;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.5px;
+}
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
 }
 
 /* ===== Card / Section ===== */
@@ -343,10 +354,38 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
-/* ===== Footer ===== */
-.footer { text-align: center; padding: 2rem 1rem; color: var(--text-secondary); font-size: 0.85rem; }
-.footer a { color: var(--primary-color); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
+/* ===== Footer (easy_stat_edu 完全互換) ===== */
+.footer {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+.footer-content p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+}
+.footer-links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.footer-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.footer-links a:hover { color: var(--primary-dark); }
 
 /* ===== Print ===== */
 @media print {
