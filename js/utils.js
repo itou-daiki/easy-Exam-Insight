@@ -30,6 +30,9 @@ export function toast(message, kind = 'info', timeout = 3500) {
 }
 
 // ---------- Tables ----------
+// opts.rowKey: function(row, idx) -> string | null. If returns a non-empty
+// string and the string starts with a 生徒管理コード prefix, the row becomes
+// clickable and navigates to the per-student feedback page.
 export function renderTable(headers, rows, opts = {}) {
   const wrap = el('div', { class: 'table-wrap' });
   const table = el('table', { class: 't-table' });
@@ -43,8 +46,24 @@ export function renderTable(headers, rows, opts = {}) {
   thead.appendChild(trh);
   table.appendChild(thead);
   const tbody = el('tbody');
-  for (const row of rows) {
+  for (let rIdx = 0; rIdx < rows.length; rIdx++) {
+    const row = rows[rIdx];
     const tr = el('tr');
+    // Auto-detect 生徒管理コード in the first cell (pattern: starts with letters and contains digits)
+    let studentCode = null;
+    if (opts.rowKey) {
+      try { studentCode = opts.rowKey(row, rIdx); } catch (e) { studentCode = null; }
+    } else if (row.length && typeof row[0] === 'string' && /^[a-z]+\d+$/i.test(row[0])) {
+      studentCode = row[0];
+    }
+    if (studentCode) {
+      tr.dataset.studentCode = studentCode;
+      tr.style.cursor = 'pointer';
+      tr.title = 'クリックで個人カルテを開く';
+      tr.addEventListener('click', () => {
+        if (typeof window.jumpToStudent === 'function') window.jumpToStudent(studentCode);
+      });
+    }
     for (const cell of row) {
       let v = cell, cls = '';
       if (cell && typeof cell === 'object') { v = cell.v; cls = cell.cls || ''; }

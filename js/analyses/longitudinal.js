@@ -129,7 +129,8 @@ function build(tests, selectedSids, onStudentsResolved) {
         div.appendChild(renderTable(
           ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
           risers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
-            { v: `+${fmtNum(r.dz, 2)}`, cls: 'good' }])
+            { v: `+${fmtNum(r.dz, 2)}`, cls: 'good' }]),
+          { rowKey: (_r, i) => risers[i] && risers[i].code }
         ));
         return div;
       })(),
@@ -139,7 +140,8 @@ function build(tests, selectedSids, onStudentsResolved) {
         div.appendChild(renderTable(
           ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
           fallers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
-            { v: fmtNum(r.dz, 2), cls: 'bad' }])
+            { v: fmtNum(r.dz, 2), cls: 'bad' }]),
+          { rowKey: (_r, i) => fallers[i] && fallers[i].code }
         ));
         return div;
       })()

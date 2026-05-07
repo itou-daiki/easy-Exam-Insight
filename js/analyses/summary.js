@@ -159,7 +159,8 @@ export function render(container, state) {
             fmtNum(e.byTest[tests[0].test_id], 2),
             fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
             { v: `+${e.delta.toFixed(2)}`, cls: 'good' },
-          ])
+          ]),
+          { rowKey: (_r, i) => dz[i] && dz[i].code }
         ));
         return d;
       })(),
@@ -173,7 +174,8 @@ export function render(container, state) {
             fmtNum(e.byTest[tests[0].test_id], 2),
             fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
             { v: e.delta.toFixed(2), cls: 'bad' },
-          ])
+          ]),
+          { rowKey: (_r, i) => dz.slice(-5).reverse()[i] && dz.slice(-5).reverse()[i].code }
         ));
         return d;
       })(),

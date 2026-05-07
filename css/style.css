@@ -263,6 +263,8 @@ body {
 .t-table th, .t-table td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
 .t-table th { background: #f8fafc; font-weight: 600; color: var(--text-primary); position: sticky; top: 0; z-index: 1; }
 .t-table tbody tr:hover { background: #f0f9ff; }
+.t-table tbody tr[data-student-code]:hover { background: #dbeafe; box-shadow: inset 0 0 0 1px var(--primary-color); }
+.t-table tbody tr[data-student-code]::after { content: ''; }
 .t-table td.num, .t-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .t-table td.bad { background: #fef2f2; color: #991b1b; font-weight: 600; }
 .t-table td.warn { background: #fef3c7; color: #92400e; }

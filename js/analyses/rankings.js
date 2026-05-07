@@ -236,7 +236,7 @@ function makeRankTable(arr, cls, totalCount) {
       x.r['クラス'] ?? '—',
       x.r['番号'] ?? '—',
       { v: x.score, cls },
-    ])
+    ]), { rowKey: r => (typeof r[1] === 'string' && /^[a-z]+\d+$/i.test(r[1])) ? r[1] : null }
   );
 }
 
@@ -250,6 +250,6 @@ function makeDomainTable(arr, col, cls, totalCount) {
       x.r['クラス'] ?? '—',
       x.score,
       { v: fmtPct(x.rate), cls },
-    ])
+    ]), { rowKey: r => (typeof r[1] === 'string' && /^[a-z]+\d+$/i.test(r[1])) ? r[1] : null }
   );
 }
