@@ -1,4 +1,4 @@
-// Test Analyzer — entry point
+// easy Exam Insight — entry point
 // =========================================================================
 
 import { loadWorkbook, saveTestsToStorage, loadTestsFromStorage, clearStorage } from './loader.js?v=5';
@@ -161,12 +161,30 @@ function makeDemoTest(testId, n, dateStr) {
     { name: '小計5', max_score: 25, domain: '思', unit_name: '応用問題' },
   ];
   const rows = [];
-  let seed = testId.length;
+  // Hash test_id (string content, not length) so different tests get
+  // distinct random sequences. Previously `seed = testId.length` collided
+  // for tests whose IDs happened to be the same length.
+  let seed = 0;
+  for (let i = 0; i < testId.length; i++) seed = (seed * 31 + testId.charCodeAt(i)) >>> 0;
+  if (seed === 0) seed = 1;
+  // Per-test growth offset so successive tests show realistic gain/decline
+  const phase = (() => {
+    if (/1学期/.test(testId)) return 0;
+    if (/2学期/.test(testId)) return 1;
+    if (/3学期/.test(testId)) return 2;
+    return 0;
+  })();
   const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
   const familyNames = ['佐藤','鈴木','高橋','田中','伊藤','渡辺','山本','中村','小林','加藤'];
   const givenNames = ['太郎','花子','次郎','三郎','美咲','大輔','直樹','里奈','翔太','美穂','拓海','彩'];
   for (let i = 0; i < n; i++) {
-    const ability = rand() * 0.6 + 0.2; // 0.2〜0.8
+    // Stable base ability per student (deterministic by index, not by rand()),
+    // so the same 生徒管理コード has consistent identity across tests.
+    const baseAbility = 0.22 + ((i * 37 + 11) % 100) / 100 * 0.6;
+    // Per-student growth trend per term (-0.05..+0.05 per phase) — some
+    // students rise, some plateau, some decline.
+    const trendPerTerm = ((((i * 17 + 5) % 100) / 100) - 0.5) * 0.10;
+    const ability = Math.max(0.05, Math.min(0.95, baseAbility + trendPerTerm * phase));
     const code = `demo${String(i + 1).padStart(4, '0')}`;
     const fam = familyNames[i % familyNames.length];
     const giv = givenNames[(i * 7) % givenNames.length];

@@ -1,6 +1,6 @@
 // Rubric — 観点別評定マトリックス（通知表用）
 // =========================================================================
-import { el, kpi, plotEl, renderTable, fmtPct, downloadXLSX } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, fmtPct, downloadXLSX, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { helpBox } from '../help.js?v=5';
 
@@ -132,12 +132,9 @@ function build(td, scale, t1, t2, t3, t4) {
   out.appendChild(renderTable(['評定', '知識・技能', '思考・判断・表現', '総合'], distRows));
 
   out.appendChild(el('h3', null, '🧑‍🎓 生徒別 観点別評定'));
-  const anonymize = !!window._appState?.anonymize;
   const studentRows = rows.map((x, i) => {
     const r = x.r;
-    const name = anonymize
-      ? `生徒${String.fromCharCode(65 + (i % 26))}${i >= 26 ? Math.floor(i / 26) : ''}`
-      : (r['氏名'] || '—');
+    const name = displayName(r['氏名'], i, r['生徒管理コード']);
     return [
       r['生徒管理コード'] || '—',
       name,

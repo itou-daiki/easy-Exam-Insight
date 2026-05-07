@@ -1,4 +1,4 @@
-/* ===== easy_stat_edu に寄せたデザイン ===== */
+/* ===== easy Exam Insight — design system ===== */
 
 :root {
     --primary-color: #1e90ff;
@@ -17,11 +17,13 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
     background: var(--background);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif;
     color: var(--text-primary);
     line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* ===== App container ===== */
@@ -31,7 +33,7 @@ body {
     padding: 2rem;
 }
 
-/* ===== Hero (easy_stat_edu 完全互換) ===== */
+/* ===== Hero ===== */
 .hero-section {
     background: var(--primary-color);
     border-radius: 24px;
@@ -50,21 +52,24 @@ body {
     width: 200%; height: 200%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
     animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
 }
 @keyframes pulse {
     0%,100% { transform: scale(1); opacity: 0.5; }
     50% { transform: scale(1.1); opacity: 0.3; }
 }
 .hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(1.9rem, 5vw, 3.5rem);
     font-weight: 700;
     margin-bottom: 0.5rem;
     position: relative;
     z-index: 1;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    word-break: keep-all;
+    line-height: 1.15;
 }
 .hero-caption {
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
     font-weight: 400;
     opacity: 0.85;
     margin-bottom: 1rem;
@@ -73,11 +78,12 @@ body {
     letter-spacing: 0.5px;
 }
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(0.95rem, 2.6vw, 1.25rem);
     font-weight: 300;
     opacity: 0.95;
     position: relative;
     z-index: 1;
+    line-height: 1.4;
 }
 
 /* ===== Card / Section ===== */
@@ -91,16 +97,17 @@ body {
 }
 .card.hidden { display: none; }
 .card h2 {
-    font-size: 1.6rem;
+    font-size: clamp(1.3rem, 3vw, 1.6rem);
     margin-bottom: 0.5rem;
     color: var(--text-primary);
     font-weight: 600;
     display: flex; align-items: center; gap: 0.6rem;
+    flex-wrap: wrap;
 }
 .card h2 i { color: var(--primary-color); }
 .muted { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0; margin-bottom: 1rem; }
 
-/* ===== Upload area (easy_stat_edu風) ===== */
+/* ===== Upload area ===== */
 .upload-area {
     border: 2px dashed var(--primary-light);
     border-radius: 16px;
@@ -127,10 +134,12 @@ body {
     background: linear-gradient(135deg, #eff6ff, #dbeafe);
     border: 1px solid var(--primary-light);
     border-radius: 12px;
-    padding: 0.7rem 1rem;
+    padding: 0.7rem 2.2rem 0.7rem 1rem;
     min-width: 240px;
+    max-width: 100%;
     position: relative;
     box-shadow: var(--shadow-sm);
+    word-break: break-word;
 }
 .test-pill .pill-title { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
 .test-pill .pill-meta { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem; }
@@ -138,10 +147,11 @@ body {
     position: absolute; top: 6px; right: 8px;
     background: transparent; border: none; color: var(--text-secondary);
     cursor: pointer; font-size: 0.95rem; padding: 2px 6px; border-radius: 4px;
+    line-height: 1;
 }
 .test-pill .pill-remove:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-/* ===== Buttons (easy_stat_edu風) ===== */
+/* ===== Buttons ===== */
 .btn {
     background: var(--primary-color);
     color: white;
@@ -157,9 +167,12 @@ body {
     transition: all 0.2s ease;
     font-family: inherit;
     box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    line-height: 1.2;
 }
 .btn:hover { background: var(--primary-dark); box-shadow: var(--shadow-md); transform: translateY(-1px); }
 .btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: 3px solid rgba(30, 144, 255, 0.45); outline-offset: 2px; }
 .btn.primary { background: var(--primary-color); color: white; }
 .btn.ghost { background: #f1f5f9; color: var(--text-primary); box-shadow: none; }
 .btn.ghost:hover { background: #e2e8f0; transform: none; }
@@ -168,7 +181,7 @@ body {
 .btn.small { padding: 0.4rem 0.85rem; font-size: 0.85rem; }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ===== Feature grid (easy_stat_edu風) ===== */
+/* ===== Feature grid ===== */
 .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -215,6 +228,7 @@ body {
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 0.4rem;
+    line-height: 1.3;
 }
 .feature-card p {
     font-size: 0.875rem;
@@ -237,8 +251,9 @@ body {
     display: flex; align-items: center; gap: 1rem;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 1rem; margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
-.analysis-header h2 { margin: 0; flex: 1; font-size: 1.5rem; }
+.analysis-header h2 { margin: 0; flex: 1; font-size: clamp(1.2rem, 3vw, 1.5rem); min-width: 0; word-break: break-word; }
 
 #analysis-content { font-size: 0.95rem; }
 #analysis-content h3 {
@@ -246,6 +261,7 @@ body {
     font-size: 1.15rem; color: var(--text-primary);
     border-left: 4px solid var(--primary-color);
     padding-left: 0.7rem; font-weight: 600;
+    word-break: break-word;
 }
 #analysis-content h4 { margin-top: 1.2rem; font-size: 1rem; color: var(--text-primary); font-weight: 600; }
 #analysis-content p { color: var(--text-secondary); margin: 0.5rem 0; }
@@ -258,13 +274,13 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     box-shadow: var(--shadow-sm);
+    -webkit-overflow-scrolling: touch;
 }
 .t-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: var(--surface); }
 .t-table th, .t-table td { text-align: left; padding: 0.6rem 0.85rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
 .t-table th { background: #f8fafc; font-weight: 600; color: var(--text-primary); position: sticky; top: 0; z-index: 1; }
 .t-table tbody tr:hover { background: #f0f9ff; }
 .t-table tbody tr[data-student-code]:hover { background: #dbeafe; box-shadow: inset 0 0 0 1px var(--primary-color); }
-.t-table tbody tr[data-student-code]::after { content: ''; }
 .t-table td.num, .t-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .t-table td.bad { background: #fef2f2; color: #991b1b; font-weight: 600; }
 .t-table td.warn { background: #fef3c7; color: #92400e; }
@@ -283,15 +299,15 @@ body {
 }
 .kpi:hover { box-shadow: var(--shadow-md); }
 .kpi .label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
-.kpi .value { font-size: 1.7rem; font-weight: 700; color: var(--primary-color); margin-top: 0.2rem; line-height: 1.1; }
+.kpi .value { font-size: clamp(1.3rem, 3.5vw, 1.7rem); font-weight: 700; color: var(--primary-color); margin-top: 0.2rem; line-height: 1.1; word-break: break-word; }
 .kpi .sub { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.15rem; }
 
 /* ===== Plot ===== */
 .plot { width: 100%; min-height: 320px; margin: 0.6rem 0; }
-.plot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1rem; }
+.plot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 1rem; }
 
 /* ===== Form ===== */
-.form-row { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; margin: 1rem 0; }
+.form-row { display: flex; flex-wrap: wrap; gap: 1rem 1.25rem; align-items: flex-end; margin: 1rem 0; }
 .form-row label { font-size: 0.9rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.3rem; min-width: 150px; font-weight: 500; }
 .form-row select, .form-row input[type="number"], .form-row input[type="text"] {
     padding: 0.5rem 0.75rem;
@@ -301,9 +317,11 @@ body {
     font-family: inherit;
     background: var(--surface);
     transition: border-color 0.2s;
+    max-width: 100%;
 }
 .form-row select:focus, .form-row input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1); }
-.form-row input[type="range"] { width: 220px; }
+.form-row input[type="range"] { width: 220px; max-width: 100%; }
+.class-print-row { align-items: center; padding: 0.85rem 1rem; background: #f0f9ff; border: 1px solid var(--primary-light); border-radius: 12px; }
 
 /* ===== Tabs ===== */
 .tabs {
@@ -343,7 +361,7 @@ body {
 .callout.danger { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
 .callout.success { background: #ecfdf5; border-color: #10b981; color: #065f46; }
 
-/* ===== Help / 解釈補助 ===== */
+/* ===== Help ===== */
 .help-detail {
     background: #f0f9ff;
     border: 1px solid #bae6fd;
@@ -382,19 +400,12 @@ body {
     font-size: 0.9rem;
     line-height: 1.7;
 }
-.help-body p {
-    margin: 0.3rem 0;
-    color: var(--text-primary);
-}
+.help-body p { margin: 0.3rem 0; color: var(--text-primary); }
 
-.how-to-read {
-    margin: 0.5rem 0 0;
-    padding-left: 1.5rem;
-    font-size: 0.92rem;
-}
+.how-to-read { margin: 0.5rem 0 0; padding-left: 1.5rem; font-size: 0.92rem; }
 .how-to-read li { margin: 0.2rem 0; }
 
-/* ===== Coach (自動アドバイス) ===== */
+/* ===== Coach ===== */
 .coach {
     background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
     border-left: 4px solid #f59e0b;
@@ -405,9 +416,10 @@ body {
     white-space: pre-wrap;
     line-height: 1.75;
     box-shadow: var(--shadow-sm);
+    overflow-wrap: anywhere;
 }
 
-/* ===== Toolbar (hero overlay) ===== */
+/* ===== Toolbar ===== */
 .toolbar {
     position: relative;
     z-index: 2;
@@ -427,18 +439,123 @@ body {
 .toolbar .btn.active { background: rgba(255, 255, 255, 0.35); border-color: rgba(255, 255, 255, 0.6); }
 .toolbar a.btn:hover { color: #fff; text-decoration: none; }
 
+/* ===== Footer ===== */
+.footer {
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-top: 3rem;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+.footer-content p {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+}
+.footer-links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+.footer-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.footer-links a:hover { color: var(--primary-dark); }
+
+/* ===== Manual page ===== */
+.manual-toc {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 12px;
+    z-index: 10;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+}
+.manual-toc-title {
+    display: block;
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+}
+.manual-toc-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+.manual-toc-list a {
+    display: inline-block;
+    color: var(--primary-dark);
+    text-decoration: none;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+}
+.manual-toc-list a:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+.manual h2 {
+    color: var(--primary-color);
+    margin-top: 2.5rem;
+    padding-top: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+    scroll-margin-top: 96px;
+    word-break: break-word;
+}
+.manual h3 {
+    margin-top: 1.5rem;
+    color: var(--text-primary);
+    scroll-margin-top: 96px;
+    word-break: break-word;
+}
+.manual ol, .manual ul { line-height: 1.8; padding-left: 1.5rem; }
+.manual code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 0.92em;
+    word-break: break-word;
+}
+.manual figure {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8fafc;
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+}
+.manual figure strong { display: block; margin-bottom: 0.4rem; }
+.manual .t-table { display: block; max-width: 100%; overflow-x: auto; }
+
 /* ===== Dark mode ===== */
-html.dark {
-    color-scheme: dark;
-}
-html.dark body {
-    background: #0f172a;
-    color: #e2e8f0;
-}
+html.dark { color-scheme: dark; }
+html.dark body { background: #0f172a; color: #e2e8f0; }
 html.dark .card,
 html.dark .navigation-section,
 html.dark .footer,
-html.dark .feature-card {
+html.dark .feature-card,
+html.dark .manual-toc {
     background: #1e293b;
     border-color: #334155;
     color: #e2e8f0;
@@ -473,52 +590,262 @@ html.dark .coach { background: linear-gradient(135deg, #3a2902 0%, #2a1d02 100%)
 html.dark .btn.ghost { background: #334155; color: #e2e8f0; }
 html.dark .btn.ghost:hover { background: #475569; }
 html.dark .footer-content p { color: #94a3b8; }
-
-/* ===== Footer (easy_stat_edu 完全互換) ===== */
-.footer {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 2rem;
-    margin-top: 3rem;
-    text-align: center;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-color);
-}
-.footer-content p {
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    font-size: 0.92rem;
-}
-.footer-links {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-}
-.footer-links a {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-.footer-links a:hover { color: var(--primary-dark); }
-
-/* ===== Print ===== */
-@media print {
-    .hero, .hero-section, .footer, #upload-section, #feature-section, .analysis-header { display: none !important; }
-    .card { box-shadow: none; border: 1px solid #ccc; }
-    body { background: #fff; }
-    .plot { page-break-inside: avoid; }
-}
+html.dark .class-print-row { background: #0c2540; border-color: #1e3a5f; }
+html.dark .manual-toc-list a { background: #0c2540; border-color: #1e3a5f; color: #93c5fd; }
+html.dark .manual-toc-list a:hover { background: var(--primary-color); border-color: var(--primary-color); color: white; }
+html.dark .manual code { background: #0f172a; color: #e2e8f0; }
+html.dark .manual figure { background: #0f172a; }
 
 /* ===== Responsive ===== */
-@media (max-width: 768px) {
-    .hero-title, .hero h1 { font-size: 2.5rem; }
-    #main-app, .container { padding: 1rem; }
+@media (max-width: 1024px) {
+    #main-app, .container { padding: 1.5rem; }
     .card, .navigation-section { padding: 1.5rem; }
+}
+@media (max-width: 768px) {
+    #main-app, .container { padding: 1rem; }
+    .hero-section { padding: 2rem 1.25rem; border-radius: 18px; }
+    .card, .navigation-section, .footer { padding: 1.25rem; border-radius: 14px; }
     .feature-grid { grid-template-columns: 1fr; }
+    .form-row label { min-width: 0; width: 100%; }
+    .form-row select, .form-row input[type="number"], .form-row input[type="text"] { width: 100%; }
+    .footer-links { gap: 1rem; }
+    .kpi { min-width: 140px; padding: 0.85rem 1rem; }
+    .toolbar { gap: 0.4rem; }
+    .toolbar .btn { padding: 0.4rem 0.75rem; font-size: 0.82rem; }
+    .test-pill { min-width: 0; width: 100%; }
+    .analysis-header { gap: 0.6rem; }
+    .tab-btn { padding: 0.6rem 0.85rem; font-size: 0.88rem; }
+    .table-wrap { max-height: 60vh; }
+}
+@media (max-width: 480px) {
+    #main-app, .container { padding: 0.75rem; }
+    .hero-section { padding: 1.5rem 1rem; }
+    .card, .navigation-section, .footer { padding: 1rem; }
+    .kpi { flex-basis: 100%; min-width: 0; }
+    .upload-area { padding: 1.5rem 0.5rem; }
+    .upload-area i.fa-3x { font-size: 2em; }
+    .btn { padding: 0.55rem 1rem; font-size: 0.9rem; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar .btn { justify-content: center; }
+    .footer-links { flex-direction: column; gap: 0.6rem; }
+}
+@media (hover: none) {
+    .feature-card:hover { transform: none; }
+    .btn:hover { transform: none; }
+}
+
+/* ============================================================
+   Class-batch student report — print pipeline
+   - On-screen: hidden by default
+   - On print: only #class-print-area is visible
+   - Each .print-student spans exactly 2 A4 pages (page-1 + page-2)
+   ============================================================ */
+#class-print-area { display: none; }
+
+.print-area-banner {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.85rem 1.2rem;
+    border-radius: 12px;
+    margin: 0 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+@media screen {
+    /* When the print area is appended to the body, keep it visually hidden
+       on screen — but remain in the DOM so layout/measurements work. */
+    #class-print-area {
+        position: fixed;
+        left: -10000px;
+        top: 0;
+        width: 800px;
+    }
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 12mm 14mm;
+    }
+    html, body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+    #main-app, .footer, .toolbar, .analysis-header, #upload-section,
+    #feature-section, .hero-section { display: none !important; }
+    #class-print-area {
+        display: block !important;
+        position: static !important;
+        left: auto !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .print-area-banner { display: none !important; }
+    .card { box-shadow: none; border: none; padding: 0; margin: 0; }
+
+    .print-student {
+        page-break-after: always;
+        break-after: page;
+    }
+    .print-student:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+    .print-page {
+        page-break-after: always;
+        break-after: page;
+        page-break-inside: avoid;
+    }
+    .print-student .print-page:last-child {
+        page-break-after: always;
+        break-after: page;
+    }
+    .print-student:last-child .print-page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+    .help-detail, .callout.info, .callout.warn,
+    .feature-card, .upload-area, button.btn { display: none !important; }
+}
+
+/* ===== Print card layout ===== */
+.print-student {
+    color: #111;
+    font-family: 'Inter', -apple-system, "Hiragino Sans", "Yu Gothic UI", sans-serif;
+}
+.print-page {
+    padding: 4mm 0 0 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 182mm; /* A4 portrait minus margins */
+    margin: 0 auto 6mm;
+    font-size: 10pt;
+    line-height: 1.45;
+}
+.print-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid #1e90ff;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+.print-title { font-size: 14pt; font-weight: 700; color: #1e3a8a; }
+.print-test { font-size: 9pt; color: #555; }
+.print-subhead {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-size: 10pt;
+    margin-bottom: 8px;
+    color: #1e293b;
+}
+.print-h {
+    font-size: 11pt;
+    font-weight: 600;
+    margin: 8px 0 4px;
+    color: #1e3a8a;
+    border-left: 3px solid #1e90ff;
+    padding-left: 6px;
+}
+.print-kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 8px;
+}
+.print-mini-kpi {
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 5px 8px;
+    background: #f8fafc;
+    page-break-inside: avoid;
+}
+.print-mini-kpi-label { font-size: 8pt; color: #64748b; letter-spacing: 0.02em; }
+.print-mini-kpi-value { font-size: 13pt; font-weight: 700; color: #1e3a8a; line-height: 1.1; word-break: break-all; }
+.print-mini-kpi-sub { font-size: 7.5pt; color: #64748b; }
+.print-radar-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 4px 0 6px;
+}
+.print-radar { max-width: 100%; height: auto; }
+.print-table-wrap {
+    overflow: visible;
+    margin: 4px 0;
+    page-break-inside: avoid;
+}
+.print-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    background: #fff;
+}
+.print-table th, .print-table td {
+    border: 1px solid #cbd5e1;
+    padding: 3px 6px;
+    text-align: left;
+    vertical-align: top;
+    word-break: break-word;
+}
+.print-table th { background: #eff6ff; color: #1e3a8a; font-weight: 600; }
+.print-table td.bad { background: #fef2f2; color: #991b1b; font-weight: 600; }
+.print-table td.good { background: #ecfdf5; color: #065f46; font-weight: 600; }
+.print-list {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 8px;
+}
+.print-list li {
+    padding: 3px 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    font-size: 10pt;
+}
+.print-list.good li { background: #ecfdf5; color: #065f46; border-left: 3px solid #10b981; }
+.print-list.bad li { background: #fef2f2; color: #991b1b; border-left: 3px solid #ef4444; }
+.print-coach {
+    background: #fef9c3;
+    border-left: 3px solid #f59e0b;
+    padding: 8px 10px;
+    margin: 4px 0 6px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    font-size: 9.2pt;
+    line-height: 1.55;
+    page-break-inside: avoid;
+}
+.print-warn {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 6px 10px;
+    margin: 4px 0;
+    border-radius: 4px;
+    font-size: 9pt;
+    color: #92400e;
+}
+.print-muted { color: #64748b; font-size: 9pt; margin: 4px 0; }
+.print-foot {
+    margin-top: 8px;
+    padding-top: 4px;
+    border-top: 1px solid #cbd5e1;
+    font-size: 7.5pt;
+    color: #94a3b8;
+    text-align: right;
+}
+
+/* Single-student onscreen print (existing 個人カルテを印刷 button) ---------- */
+@media print {
+    /* On the per-student print path the analysis card is what we print.
+       Keep its content visible, hide chrome. */
+    body.printing-single #class-print-area { display: none !important; }
 }

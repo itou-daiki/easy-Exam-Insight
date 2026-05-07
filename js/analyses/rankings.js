@@ -1,6 +1,6 @@
 // Rankings — TOP / WORST / MID 20 plus per-class and per-domain rankings
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=5';
+import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum, downloadXLSX, displayName } from '../utils.js?v=5';
 import { singlePicker } from '../picker.js?v=5';
 import { helpBox } from '../help.js?v=5';
 
@@ -30,12 +30,12 @@ function build(td) {
     'クラス内・学年内のランキング、そしてクラス対抗の平均ランキングまで網羅。'
   ));
 
-  const anonymize = !!window._appState?.anonymize;
-  const anonName = (r, idx) => anonymize
-    ? `生徒${String.fromCharCode(65 + (idx % 26))}${idx >= 26 ? Math.floor(idx / 26) : ''}`
-    : (r['氏名'] || '—');
-
-  const rowsAnnotated = td.rows.map((r, idx) => ({ r, idx, name: anonName(r, idx) }));
+  // Use shared displayName for consistent anonymization (生徒A〜Z, 生徒AA…
+  // for >26 students). The anonymized label is stable across all analyses.
+  const rowsAnnotated = td.rows.map((r, idx) => ({
+    r, idx,
+    name: displayName(r['氏名'], idx, r['生徒管理コード']),
+  }));
 
   const totals = rowsAnnotated.filter(x => Number.isFinite(x.r['合計点']))
     .map(x => ({ ...x, score: x.r['合計点'] }))

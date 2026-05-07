@@ -145,38 +145,51 @@ export function render(container, state) {
     const dz = tracked.map(e => ({
       ...e,
       delta: e.byTest[tests[tests.length - 1].test_id] - e.byTest[tests[0].test_id],
-    })).sort((a, b) => b.delta - a.delta);
+    })).filter(e => Number.isFinite(e.delta));
+
+    // Separate by sign so risers/fallers never overlap. Without this filter,
+    // a small tracked set (≤5) showed identical students in both panels.
+    const risers = dz.filter(e => e.delta > 0).sort((a, b) => b.delta - a.delta).slice(0, 5);
+    const fallers = dz.filter(e => e.delta < 0).sort((a, b) => a.delta - b.delta).slice(0, 5);
 
     out.appendChild(el('h3', null, '🚀 大きく伸びた / 落ちた生徒（直近 vs 初回）'));
     out.appendChild(el('div', { class: 'plot-grid' },
       (() => {
         const d = el('div');
         d.appendChild(el('h4', null, '🚀 伸び TOP 5'));
-        d.appendChild(renderTable(
-          ['氏名', '初回Z', '直近Z', 'ΔZ'],
-          dz.slice(0, 5).map((e, i) => [
-            displayName(e.name, i, e.code),
-            fmtNum(e.byTest[tests[0].test_id], 2),
-            fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
-            { v: `+${e.delta.toFixed(2)}`, cls: 'good' },
-          ]),
-          { rowKey: (_r, i) => dz[i] && dz[i].code }
-        ));
+        if (!risers.length) {
+          d.appendChild(el('div', { class: 'callout info' }, '— ΔZ > 0 の生徒が見つかりません。'));
+        } else {
+          d.appendChild(renderTable(
+            ['氏名', '初回Z', '直近Z', 'ΔZ'],
+            risers.map(e => [
+              displayName(e.name, null, e.code),
+              fmtNum(e.byTest[tests[0].test_id], 2),
+              fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
+              { v: `+${e.delta.toFixed(2)}`, cls: 'good' },
+            ]),
+            { rowKey: (_r, i) => risers[i] && risers[i].code }
+          ));
+        }
         return d;
       })(),
       (() => {
         const d = el('div');
         d.appendChild(el('h4', null, '🚨 低下 TOP 5（要面談）'));
-        d.appendChild(renderTable(
-          ['氏名', '初回Z', '直近Z', 'ΔZ'],
-          dz.slice(-5).reverse().map((e, i) => [
-            displayName(e.name, dz.length-1-i, e.code),
-            fmtNum(e.byTest[tests[0].test_id], 2),
-            fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
-            { v: e.delta.toFixed(2), cls: 'bad' },
-          ]),
-          { rowKey: (_r, i) => dz.slice(-5).reverse()[i] && dz.slice(-5).reverse()[i].code }
-        ));
+        if (!fallers.length) {
+          d.appendChild(el('div', { class: 'callout info' }, '— ΔZ < 0 の生徒が見つかりません。'));
+        } else {
+          d.appendChild(renderTable(
+            ['氏名', '初回Z', '直近Z', 'ΔZ'],
+            fallers.map(e => [
+              displayName(e.name, null, e.code),
+              fmtNum(e.byTest[tests[0].test_id], 2),
+              fmtNum(e.byTest[tests[tests.length - 1].test_id], 2),
+              { v: e.delta.toFixed(2), cls: 'bad' },
+            ]),
+            { rowKey: (_r, i) => fallers[i] && fallers[i].code }
+          ));
+        }
         return d;
       })(),
     ));
@@ -203,7 +216,7 @@ export function render(container, state) {
       tests.every(t => e.byTest[t.test_id] != null && e.byTest[t.test_id] < -1)
     );
     if (chronic.length) {
-      actions.push(`持続的に下位の生徒 ${chronic.length}名（${chronic.slice(0, 3).map((e, i) => displayName(e.name, i, e.code)).join('・')} 等）に個別の声かけ・面談を実施`);
+      actions.push(`持続的に下位の生徒 ${chronic.length}名（${chronic.slice(0, 3).map(e => displayName(e.name, null, e.code)).join('・')} 等）に個別の声かけ・面談を実施`);
     }
   }
   const veryHard = priorityList.filter(p => p.rate < 0.3);

@@ -1,4 +1,4 @@
-# 📊 Test Analyzer
+# 📊 easy Exam Insight
 
 ブラウザ上で動作するテスト結果分析Webアプリケーション。
 学校採用フォーマットの集計Excelをアップロードすると、設問ごとの点数から
@@ -17,7 +17,7 @@
 | 概要・EDA | 得点分布／クラス比較／項目別ヒートマップで全体像を把握 |
 | 項目分析（CTT） | 困難度・識別力・Cronbach α・α-if-deleted で「良問／要改善問」を抽出 |
 | クラスタ分析 | K-means + PCA で生徒タイプを4〜8群に分類、レーダーで可視化 |
-| 生徒別フィードバック | 個人カルテ／強み弱み／自動コーチング文／類似生徒／ペア学習推奨／印刷対応 |
+| 生徒別フィードバック | 個人カルテ／強み弱み／自動コーチング文／類似生徒／ペア学習推奨／クラス単位の一括印刷（A4 2枚/人）|
 | 連関分析 | アソシエーション・ルール抽出（Apriori-lite）／同時失点ヒートマップ／相関ネットワーク |
 | 教員ダッシュボード | 再指導優先度ランキング／クラス比較ANOVA／要支援生徒一覧／本日の指導テーマ／Excelダウンロード |
 | 縦断比較 | 複数考査をまたいだZスコア軌跡／伸びた・落ちた生徒検出／持続的下位検出／次回予測スコア |
@@ -41,7 +41,7 @@
 ## 🛠️ ローカル動作確認
 
 ```bash
-cd test_analyzer_web
+cd easy-Exam-Insight
 python3 -m http.server 8000
 # → http://localhost:8000 をブラウザで開く
 ```
@@ -76,24 +76,30 @@ python3 -m http.server 8000
 ## 📁 ディレクトリ構成
 
 ```
-test_analyzer_web/
+easy-Exam-Insight/
 ├── index.html              ← エントリポイント
+├── manual.html             ← 利用マニュアル
 ├── .nojekyll               ← GitHub Pages 用
-├── css/style.css           ← デザイン（easy_stat_edu 準拠）
+├── css/style.css           ← デザイン（easy_stat_edu 準拠）+ A4印刷スタイル
 ├── js/
 │   ├── main.js             ← ファイル読込／ビュー切り替え
 │   ├── loader.js           ← Excel→TestData変換
 │   ├── utils.js            ← 表・グラフ・統計ヘルパー
 │   ├── picker.js           ← 共通テスト選択ウィジェット
+│   ├── help.js             ← 用語解説ボックス
 │   ├── ml.js               ← K-means / PCA / Apriori
 │   └── analyses/
+│       ├── summary.js
+│       ├── data_quality.js
 │       ├── overview.js
 │       ├── item_analysis.js
 │       ├── clustering.js
-│       ├── student_feedback.js
+│       ├── student_feedback.js   ← クラス単位の個票一括印刷を含む
 │       ├── association.js
 │       ├── teacher_dashboard.js
-│       └── longitudinal.js
+│       ├── longitudinal.js
+│       ├── rankings.js
+│       └── rubric.js
 └── README.md
 ```
 

@@ -119,40 +119,52 @@ function build(tests, selectedSids, onStudentsResolved) {
       lastZ: s.byTest[last].z,
     })).filter(s => Number.isFinite(s.dz));
 
-    const risers = ranked.slice().sort((a, b) => b.dz - a.dz).slice(0, 10);
-    const fallers = ranked.slice().sort((a, b) => a.dz - b.dz).slice(0, 10);
+    // Filter by sign so 伸び/落ち never overlap. Without this filter, a
+    // small student set (or near-zero ΔZ) could put the same students in
+    // both panels.
+    const risers = ranked.filter(r => r.dz > 0).sort((a, b) => b.dz - a.dz).slice(0, 10);
+    const fallers = ranked.filter(r => r.dz < 0).sort((a, b) => a.dz - b.dz).slice(0, 10);
 
     out.appendChild(el('div', { class: 'plot-grid' },
       (() => {
         const div = el('div');
         div.appendChild(el('h4', null, '🚀 大きく伸びた生徒 Top 10'));
-        div.appendChild(renderTable(
-          ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
-          risers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
-            { v: `+${fmtNum(r.dz, 2)}`, cls: 'good' }]),
-          { rowKey: (_r, i) => risers[i] && risers[i].code }
-        ));
+        if (!risers.length) {
+          div.appendChild(el('div', { class: 'callout info' }, '— ΔZ > 0 の生徒が見つかりません。'));
+        } else {
+          div.appendChild(renderTable(
+            ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
+            risers.map(r => [displayName(r.name, null, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
+              { v: `+${fmtNum(r.dz, 2)}`, cls: 'good' }]),
+            { rowKey: (_r, i) => risers[i] && risers[i].code }
+          ));
+        }
         return div;
       })(),
       (() => {
         const div = el('div');
         div.appendChild(el('h4', null, '🚨 大きく落ちた生徒 Top 10（要面談）'));
-        div.appendChild(renderTable(
-          ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
-          fallers.map((r, i) => [displayName(r.name, i, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
-            { v: fmtNum(r.dz, 2), cls: 'bad' }]),
-          { rowKey: (_r, i) => fallers[i] && fallers[i].code }
-        ));
+        if (!fallers.length) {
+          div.appendChild(el('div', { class: 'callout info' }, '— ΔZ < 0 の生徒が見つかりません。'));
+        } else {
+          div.appendChild(renderTable(
+            ['氏名', '生徒管理コード', `初期Z(${first})`, `末期Z(${last})`, 'ΔZ'],
+            fallers.map(r => [displayName(r.name, null, r.code), r.code, fmtNum(r.firstZ, 2), fmtNum(r.lastZ, 2),
+              { v: fmtNum(r.dz, 2), cls: 'bad' }]),
+            { rowKey: (_r, i) => fallers[i] && fallers[i].code }
+          ));
+        }
         return div;
       })()
     ));
 
-    const chronic = ranked.filter(s => tests.every(t => s.byTest[t.test_id].z < -1));
+    const chronic = ranked.filter(s => tests.every(t =>
+      Number.isFinite(s.byTest[t.test_id]?.z) && s.byTest[t.test_id].z < -1));
     out.appendChild(el('h3', null, '🎯 持続的に下位の生徒（全テストでZ < -1）'));
     if (chronic.length) {
       out.appendChild(renderTable(
         ['氏名', '生徒管理コード', ...tests.map(t => `Z(${t.test_id})`)],
-        chronic.map((s, i) => [displayName(s.name, i, s.code), s.code, ...tests.map(t => fmtNum(s.byTest[t.test_id].z, 2))])
+        chronic.map(s => [displayName(s.name, null, s.code), s.code, ...tests.map(t => fmtNum(s.byTest[t.test_id]?.z, 2))])
       ));
       out.appendChild(el('div', { class: 'callout warn' },
         `${chronic.length}名が全テストで学年下位（Z<-1）に該当。早期介入を推奨。`));
@@ -190,7 +202,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         d.appendChild(el('h4', null, '📈 予測上位 10名'));
         d.appendChild(renderTable(
           ['氏名', '直近合計点', '予測合計点', '傾向'],
-          top10.map((s, i) => [displayName(s.name, i, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
+          top10.map(s => [displayName(s.name, null, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
             { v: s.slope > 0 ? '↑ 上昇' : (s.slope < 0 ? '↓ 下降' : '→ 横這い'),
               cls: s.slope > 0 ? 'good' : (s.slope < 0 ? 'bad' : '') }])
         ));
@@ -201,7 +213,7 @@ function build(tests, selectedSids, onStudentsResolved) {
         d.appendChild(el('h4', null, '📉 予測下位 10名（要支援）'));
         d.appendChild(renderTable(
           ['氏名', '直近合計点', '予測合計点', '傾向'],
-          bot10.map((s, i) => [displayName(s.name, i, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
+          bot10.map(s => [displayName(s.name, null, s.code), fmtNum(s.lastTotal, 1), fmtNum(s.predicted, 1),
             { v: s.slope > 0 ? '↑ 上昇' : (s.slope < 0 ? '↓ 下降' : '→ 横這い'),
               cls: s.slope > 0 ? 'good' : (s.slope < 0 ? 'bad' : '') }])
         ));
