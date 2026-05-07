@@ -1,6 +1,6 @@
 // Shared "test picker" widget for analysis modules
 // =========================================================================
-import { el } from './utils.js?v=3';
+import { el } from './utils.js?v=4';
 
 export function singlePicker(state, onChange) {
   const wrap = el('div', { class: 'form-row' });

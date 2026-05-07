@@ -39,8 +39,22 @@
 
   <section id="feature-section" class="card">
     <h2><i class="fas fa-microscope"></i> 利用できる分析</h2>
-    <p class="muted">データ読込後、以下のカードから分析を選択してください。</p>
+    <p class="muted">データ読込後、以下のカードから分析を選択してください。<strong>初めての方は『サマリー』から始めるのがおすすめです。</strong></p>
     <div class="feature-grid">
+      <div class="feature-card disabled" data-analysis="summary" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-clipboard-list"></i></div>
+        <h3>📋 サマリー</h3>
+        <p>全考査の要点を1ページで。次のアクションが自動提案されます。</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+
+      <div class="feature-card disabled" data-analysis="data_quality" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>🔍 データ品質チェック</h3>
+        <p>欠損・入力ミス・外れ値・合計点不一致などを自動検出。分析前の必読。</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+
       <div class="feature-card disabled" data-analysis="overview" data-requires="1">
         <div class="feature-icon"><i class="fas fa-search"></i></div>
         <h3>概要・EDA</h3>
@@ -115,6 +129,6 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 
-<script type="module" src="js/main.js?v=3"></script>
+<script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>

@@ -18,8 +18,16 @@ function detectHeaderRow(aoa, maxScan = 6) {
 
 function classifyDomain(name) {
   if (typeof name !== 'string') return null;
-  const m = name.match(/[\d一-龥A-Z]学期([A-Z])/);
-  if (m) return ({ R: '探究力(R)', B: '知識/活用(B)', G: '態度(G)' }[m[1]]) || m[1];
+  // Allow half- and full-width digits and uppercase letters
+  // (e.g. "３学期R課題設定力" with full-width 3 and ASCII R).
+  const m = name.match(/[\d０-９一-龥A-ZＡ-Ｚ]学期([A-ZＡ-Ｚ])/);
+  if (m) {
+    let letter = m[1];
+    if (/[Ａ-Ｚ]/.test(letter)) {
+      letter = String.fromCharCode(letter.charCodeAt(0) - 0xFEE0);
+    }
+    return ({ R: '探究力(R)', B: '知識/活用(B)', G: '態度(G)' }[letter]) || letter;
+  }
   if (name === '知' || name.includes('知識')) return '知';
   if (name === '思' || name.includes('思考')) return '思';
   return null;
@@ -159,12 +167,64 @@ export async function loadWorkbook(file) {
     }
   }
 
+  // Stage 1: max scores from クラス平均 sheet
   const maxScores = detectMaxScores(workbook, avgSheetName, numericScoreCols);
-  const items = numericScoreCols.map(name => ({
-    name,
-    max_score: maxScores[name] != null ? maxScores[name] : null,
-    domain: classifyDomain(name),
-  }));
+
+  // Stage 2: extract supplementary header info (unit names + max scores)
+  // from rows ABOVE the header row of the main sheet.
+  // Some workbooks have row 0 like:
+  //   ['SSPⅠ_3学期…', null, null, null, '配点', 100, 55, 45, null×5,
+  //    '情報社会と問題解決', 'プログラミング', '統計', ...]
+  // i.e. config string + 配点 marker + numeric maxes for domain cols + unit
+  // name strings for the score columns — all in the same row.
+  // Capture both kinds of info regardless of whether 配点 marker exists.
+  const unitNamesByColIdx = {};
+  const maxScoresByColIdx = {};
+  for (let r = 0; r < headerRow; r++) {
+    const row = aoa[r] || [];
+    for (let k = 0; k < row.length; k++) {
+      const v = row[k];
+      if (v == null || v === '') continue;
+      if (typeof v === 'number' && Number.isFinite(v)) {
+        if (maxScoresByColIdx[k] == null) maxScoresByColIdx[k] = v;
+      } else if (typeof v === 'string') {
+        const s = v.trim();
+        if (!s || s === '配点') continue;
+        if (!unitNamesByColIdx[k]) unitNamesByColIdx[k] = s;
+      }
+    }
+  }
+  // Build kept-name → original-col-index map
+  const nameToOrigCol = {};
+  keptColIdx.forEach((origIdx, k) => { nameToOrigCol[keptHeaders[k]] = origIdx; });
+
+  const items = numericScoreCols.map(name => {
+    const origIdx = nameToOrigCol[name];
+    const fromMain = origIdx != null ? maxScoresByColIdx[origIdx] : null;
+    const max = maxScores[name] != null ? maxScores[name]
+              : (fromMain != null ? fromMain : null);
+    const unitName = origIdx != null ? unitNamesByColIdx[origIdx] : null;
+    return {
+      name,
+      max_score: max,
+      domain: classifyDomain(name),
+      unit_name: unitName || null,
+    };
+  });
+
+  // Also pull max scores for domain cols (合計点/知/思) from supplementary row if present
+  for (const dc of domainPresent) {
+    const origIdx = nameToOrigCol[dc];
+    if (origIdx != null && maxScoresByColIdx[origIdx] != null) {
+      // store on a side dict on each domain (not used by every page, but available)
+      // we tuck this into items isn't right, so store on the test object below
+    }
+  }
+  const domainMaxScores = {};
+  for (const dc of domainPresent) {
+    const origIdx = nameToOrigCol[dc];
+    if (origIdx != null && maxScoresByColIdx[origIdx] != null) domainMaxScores[dc] = maxScoresByColIdx[origIdx];
+  }
 
   let allDomain = domainPresent.slice();
   if (!allDomain.includes('合計点') && numericScoreCols.length) {
@@ -197,9 +257,17 @@ export async function loadWorkbook(file) {
     rows: filtered,
     items,
     domain_cols: allDomain,
+    domain_max_scores: domainMaxScores,
     meta_cols: metaPresent,
     source_filename: file.name,
   };
+}
+
+// Display label for an item: prefer unit_name when set
+export function itemLabel(it) {
+  if (!it) return '';
+  if (it.unit_name) return `${it.unit_name}（${it.name}）`;
+  return it.name;
 }
 
 // ---------- Helpers ----------

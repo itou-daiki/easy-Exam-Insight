@@ -1,9 +1,10 @@
 // Association — discover linked struggle patterns
 // =========================================================================
-import { el, plotEl, renderTable, corr, fmtPct, fmtNum } from '../utils.js?v=3';
-import { singlePicker } from '../picker.js?v=3';
-import { ratioMatrix } from '../loader.js?v=3';
-import { apriori } from '../ml.js?v=3';
+import { el, plotEl, renderTable, corr, fmtPct, fmtNum } from '../utils.js?v=4';
+import { singlePicker } from '../picker.js?v=4';
+import { ratioMatrix } from '../loader.js?v=4';
+import { apriori } from '../ml.js?v=4';
+import { helpBox, howToRead, explain } from '../help.js?v=4';
 
 export function render(container, state) {
   const wrap = el('div');
@@ -53,6 +54,35 @@ function build(td, threshold, mode, minSup, minConf, minLift, corrThres) {
     out.appendChild(el('div', { class: 'callout warn' }, '小問が2つ以上必要です'));
     return out;
   }
+
+  // ===== Plain-language overview at the top =====
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '🎯 この分析でわかること'),
+    el('br'),
+    '「Aの問題でつまずく生徒は、Bの問題でもつまずく」のような、',
+    el('strong', null, '生徒の躓きの連鎖'),
+    'を発見します。',
+    el('br'),
+    el('br'),
+    '例えば「小計1（基礎計算）が苦手な生徒の80%は、小計3（応用問題）でも苦手」のような',
+    'ルールが見つかれば、',
+    el('strong', null, '応用問題ができない原因が基礎計算にある'),
+    '可能性が示唆されます。',
+    el('br'),
+    'こうした連鎖を知ることで、',
+    el('strong', null, '「どこから教え直すべきか」'),
+    'の優先順位が明確になります。'
+  ));
+
+  out.appendChild(howToRead([
+    el('span', null, el('strong', null, '前提・結論'), ' …「Aで苦手 → Bでも苦手」のAが前提、Bが結論。'),
+    el('span', null, el('strong', null, '支持度（support）'), ' …全生徒の何%が「前提と結論を両方とも満たす」か。'),
+    el('span', null, el('strong', null, '確信度（confidence）'), ' …前提を満たす生徒のうち、何%が結論も満たすか。'),
+    el('span', null, el('strong', null, 'リフト（lift）'), ' …偶然の何倍くらい強い関連か。1.2以上で意味のある連鎖。'),
+  ]));
+
+  out.appendChild(explain('association'));
+
   const ratios = ratioMatrix(td);
   const itemNames = td.items.map(i => i.name);
 
@@ -108,8 +138,33 @@ function build(td, threshold, mode, minSup, minConf, minLift, corrThres) {
       [`前提(${label})`, `結論(${label})`, '支持度', '確信度', 'リフト', '人数'],
       rows
     ));
-    out.appendChild(el('p', { class: 'muted' },
-      `読み方: 「前提が${label}の生徒のうち、確信度% が結論も${label}」。リフトが大きいほど偶然では説明できない強い連関。`));
+
+    // Plain-language narrative for the top rule
+    const top = filtered[0];
+    if (top) {
+      const ant = top.ant.join('・');
+      const cons = top.cons.join('・');
+      out.appendChild(el('div', { class: 'callout success' },
+        el('strong', null, '💡 一番強い連鎖: '),
+        el('br'),
+        `「`,
+        el('strong', null, ant),
+        `」が${label}の生徒のうち、`,
+        el('strong', null, `${(top.confidence * 100).toFixed(0)}%`),
+        `（${top.count}名）が「`,
+        el('strong', null, cons),
+        `」も${label}でした。`,
+        el('br'),
+        `偶然の起こりやすさの`,
+        el('strong', null, `${top.lift.toFixed(2)}倍`),
+        `の強さで連鎖しています（リフト＝${top.lift.toFixed(2)}）。`,
+        el('br'), el('br'),
+        el('strong', null, '👉 教育的示唆: '),
+        mode === 'low'
+          ? `「${ant}」をマスターすれば、「${cons}」もできるようになる可能性が高いです。指導の優先順位として「${ant}」を先に。`
+          : `「${ant}」が得意な生徒は「${cons}」も得意な傾向。同じ思考プロセスを使う問題群かもしれません。`
+      ));
+    }
   }
 
   out.appendChild(el('h3', null, '🔗 項目相関ネットワーク'));

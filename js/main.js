@@ -1,8 +1,8 @@
 // Test Analyzer — entry point
 // =========================================================================
 
-import { loadWorkbook } from './loader.js?v=3';
-import { el, clear, toast } from './utils.js?v=3';
+import { loadWorkbook } from './loader.js?v=4';
+import { el, clear, toast } from './utils.js?v=4';
 
 export const state = { tests: [] };
 window._appState = state;
@@ -107,6 +107,8 @@ function updateFeatureCards() {
 }
 
 const ANALYSIS_TITLES = {
+  summary: '📋 サマリー（全分析のダイジェスト）',
+  data_quality: '🔍 データ品質チェック',
   overview: '🔍 概要・EDA',
   item_analysis: '📐 項目分析（古典的テスト理論）',
   clustering: '🧬 クラスタ分析（生徒タイプの発見）',
@@ -128,7 +130,7 @@ async function showAnalysis(type) {
       ' 分析モジュールを読み込み中…')
   );
   try {
-    const mod = await import(`./analyses/${type}.js?v=3`);
+    const mod = await import(`./analyses/${type}.js?v=4`);
     clear(analysisContent);
     mod.render(analysisContent, state);
     window.scrollTo({ top: 0, behavior: 'smooth' });

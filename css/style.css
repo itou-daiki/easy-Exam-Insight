@@ -341,6 +341,57 @@ body {
 .callout.danger { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
 .callout.success { background: #ecfdf5; border-color: #10b981; color: #065f46; }
 
+/* ===== Help / 解釈補助 ===== */
+.help-detail {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 0.7rem 1rem;
+    margin: 0.6rem 0;
+    transition: all 0.2s;
+}
+.help-detail[open] {
+    background: #ecfeff;
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-sm);
+}
+.help-detail summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary-dark);
+    font-size: 0.93rem;
+    list-style: none;
+    user-select: none;
+}
+.help-detail summary::-webkit-details-marker { display: none; }
+.help-detail summary::before {
+    content: '▶';
+    display: inline-block;
+    margin-right: 0.4rem;
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+    color: var(--primary-color);
+}
+.help-detail[open] summary::before { transform: rotate(90deg); }
+.help-detail summary:hover { color: var(--primary-color); }
+.help-body {
+    margin-top: 0.6rem;
+    padding-left: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+}
+.help-body p {
+    margin: 0.3rem 0;
+    color: var(--text-primary);
+}
+
+.how-to-read {
+    margin: 0.5rem 0 0;
+    padding-left: 1.5rem;
+    font-size: 0.92rem;
+}
+.how-to-read li { margin: 0.2rem 0; }
+
 /* ===== Coach (自動アドバイス) ===== */
 .coach {
     background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);

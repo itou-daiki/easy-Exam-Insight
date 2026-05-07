@@ -1,7 +1,8 @@
 // Overview / EDA — distributions, class comparisons, item heatmap
 // =========================================================================
-import { el, kpi, plotEl, renderTable, makeTabs, mean, median, stdev, fmtNum } from '../utils.js?v=3';
-import { singlePicker } from '../picker.js?v=3';
+import { el, kpi, plotEl, renderTable, makeTabs, mean, median, stdev, fmtNum } from '../utils.js?v=4';
+import { singlePicker } from '../picker.js?v=4';
+import { explain, helpBox, howToRead } from '../help.js?v=4';
 
 export function render(container, state) {
   const wrap = el('div');
