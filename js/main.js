@@ -1,8 +1,8 @@
 // Test Analyzer — entry point
 // =========================================================================
 
-import { loadWorkbook } from './loader.js';
-import { el, clear, toast } from './utils.js';
+import { loadWorkbook } from './loader.js?v=3';
+import { el, clear, toast } from './utils.js?v=3';
 
 export const state = { tests: [] };
 window._appState = state;
@@ -128,7 +128,7 @@ async function showAnalysis(type) {
       ' 分析モジュールを読み込み中…')
   );
   try {
-    const mod = await import(`./analyses/${type}.js`);
+    const mod = await import(`./analyses/${type}.js?v=3`);
     clear(analysisContent);
     mod.render(analysisContent, state);
     window.scrollTo({ top: 0, behavior: 'smooth' });
