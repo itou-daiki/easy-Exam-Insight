@@ -19,6 +19,14 @@ export function render(container, state) {
 function build(td) {
   const out = el('div');
   if (!td.items.length) return out;
+
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '🎓 教員ダッシュボードでわかること'),
+    el('br'),
+    '次の授業で再指導すべき項目、クラス間の差、要支援生徒のリストを自動生成します。',
+    '「本日の指導テーマ」を毎回見て授業準備に活かしてください。'
+  ));
+  out.appendChild(explain('reteachPriority'));
   const df = td.rows;
   const itemNames = td.items.map(i => i.name);
   const ratios = ratioMatrix(td);

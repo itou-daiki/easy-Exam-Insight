@@ -39,6 +39,16 @@ function build(td, k, doStd) {
     return out;
   }
 
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '🧬 クラスタ分析でわかること'),
+    el('br'),
+    '生徒を「得点パターン」で自動グループ分けし、',
+    el('strong', null, '「数学は得意だが思考力問題が苦手」「全体的に伸び悩み」などの学習者タイプ'),
+    'を発見します。タイプ別の指導戦略の設計に役立ちます。'
+  ));
+  out.appendChild(explain('cluster'));
+  out.appendChild(explain('pca'));
+
   const items = td.items;
   const itemNames = items.map(i => i.name);
   const ratiosFull = ratioMatrix(td);

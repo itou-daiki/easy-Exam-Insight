@@ -48,6 +48,16 @@ function build(td, idx) {
   const r = td.rows[idx];
   if (!r) return out;
 
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '👤 個人カルテでわかること'),
+    el('br'),
+    '選択した生徒の強み・弱み、クラス比較、類似する生徒、ペア学習推奨などを一覧表示します。',
+    '保護者面談・三者面談で印刷して使える形式です（右下『個人カルテを印刷』ボタン）。'
+  ));
+  out.appendChild(explain('zScore'));
+  out.appendChild(explain('hiddenRisk'));
+  out.appendChild(explain('pairLearning'));
+
   const peers = ('クラス' in r && r['クラス'] != null)
     ? td.rows.filter(rr => rr['クラス'] === r['クラス'])
     : td.rows;

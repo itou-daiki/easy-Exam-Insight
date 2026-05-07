@@ -52,6 +52,15 @@ export function render(container, state) {
 
 function build(tests, selectedSids, onStudentsResolved) {
   const out = el('div');
+
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '📈 縦断比較でわかること'),
+    el('br'),
+    '同じ生徒を複数の考査で追跡し、Zスコアの変化（伸び・低下）を可視化します。',
+    '「コツコツ伸びている子」「失速している子」を早期に検出して、声かけのタイミングを見つけます。'
+  ));
+  out.appendChild(explain('zScore'));
+  out.appendChild(explain('prediction'));
   tests = tests.slice().sort((a, b) => {
     const da = a.test_date ? a.test_date.getTime() : Infinity;
     const db = b.test_date ? b.test_date.getTime() : Infinity;

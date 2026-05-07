@@ -19,6 +19,13 @@ function build(td) {
   const out = el('div');
   const df = td.rows;
 
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '🔍 概要・EDAでわかること'),
+    el('br'),
+    '読み込んだデータの全体像を把握します。生徒数・クラス数・小問数・分布の形・クラス間の差など、',
+    'まず最初に確認すべき基本統計が一覧できます。'
+  ));
+
   const totals = df.map(r => r['合計点']).filter(Number.isFinite);
   const classes = new Set(df.map(r => r['クラス']).filter(v => v != null));
 

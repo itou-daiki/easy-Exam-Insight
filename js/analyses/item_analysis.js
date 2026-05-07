@@ -50,6 +50,13 @@ function build(td) {
 
   const alpha = cronbachAlpha(completeMatrix);
 
+  out.appendChild(el('div', { class: 'callout info' },
+    el('strong', null, '📐 項目分析（CTT）でわかること'),
+    el('br'),
+    'テストの「設問の良し悪し」「テスト全体の信頼性」を客観的に評価します。',
+    'どの問題を次回出題し続けるべきか、どの問題を見直すべきかが分かります。'
+  ));
+
   out.appendChild(el('div', { class: 'kpi-row' },
     kpi('Cronbach α', Number.isFinite(alpha) ? alpha.toFixed(3) : '—', '0.7以上が望ましい'),
     kpi('項目数', td.items.length),
@@ -57,6 +64,8 @@ function build(td) {
     kpi('総得点 平均', fmtNum(mean(total), 2)),
     kpi('総得点 SD', fmtNum(stdev(total), 2)),
   ));
+
+  out.appendChild(explain('alpha'));
 
   out.appendChild(el('h3', null, '📋 項目分析テーブル'));
   const rows = td.items.map(it => {
@@ -84,8 +93,11 @@ function build(td) {
     el('strong', null, '識別力 (相関/D)'),
     ': 0.2未満=弱い（出題改善候補）、0.4以上=良問。'
   ));
+  out.appendChild(explain('difficulty'));
+  out.appendChild(explain('discrimination'));
 
   out.appendChild(el('h3', null, '🎯 困難度 × 識別力 マップ'));
+  out.appendChild(explain('classification'));
   const xs = [], ys = [], lbls = [], col = [];
   for (const it of td.items) {
     const v = df.map(r => r[it.name]).filter(Number.isFinite);
@@ -121,6 +133,7 @@ function build(td) {
   ));
 
   out.appendChild(el('h3', null, '🧪 α-if-deleted（その項目を除いたときの α）'));
+  out.appendChild(explain('alphaIfDeleted'));
   const deletedRows = [];
   for (const c of itemNames) {
     const restCols = itemNames.filter(x => x !== c);
