@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Analyzer — テスト結果分析アプリ</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1><i class="fas fa-chart-bar"></i> Test Analyzer</h1>
+    <p>テスト結果から「どこで何がつまずいているか」を見つけ、生徒・教員に多角的なフィードバックを返す<br>
+       <strong>完全クライアントサイド・データはブラウザから出ません</strong></p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section id="upload-section" class="card">
+    <h2><i class="fas fa-upload"></i> データ読込</h2>
+    <p class="muted">学校採用フォーマットの集計データExcel（.xlsx）を1つ以上アップロードしてください。同じ生徒管理コードがあれば自動的に縦断比較できます。</p>
+
+    <div id="upload-area" class="upload-area">
+      <i class="fas fa-file-excel fa-3x"></i>
+      <p class="upload-text">ここにファイルをドラッグ＆ドロップ または クリックして選択</p>
+      <input type="file" id="file-input" accept=".xlsx,.xls" multiple hidden>
+      <button class="btn primary" id="upload-btn"><i class="fas fa-folder-open"></i> ファイルを選択</button>
+    </div>
+
+    <div id="loaded-tests" class="loaded-tests"></div>
+
+    <div class="upload-controls">
+      <button class="btn ghost" id="clear-btn"><i class="fas fa-trash"></i> 全消去</button>
+    </div>
+  </section>
+
+  <section id="feature-section" class="card">
+    <h2><i class="fas fa-microscope"></i> 利用できる分析</h2>
+    <p class="muted">データ読込後、以下のカードから分析を選択してください。</p>
+    <div class="feature-grid">
+      <div class="feature-card disabled" data-analysis="overview" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-search"></i></div>
+        <h3>概要・EDA</h3>
+        <p>得点分布・クラス比較・項目別ヒートマップで全体像をつかむ</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="item_analysis" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-ruler-combined"></i></div>
+        <h3>項目分析（CTT）</h3>
+        <p>困難度・識別力・Cronbach αで「良問／要改善問」を見える化</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="clustering" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-dna"></i></div>
+        <h3>クラスタ分析</h3>
+        <p>得点パターンから「生徒タイプ」を発見（K-means）</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="student_feedback" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-user-graduate"></i></div>
+        <h3>生徒別フィードバック</h3>
+        <p>個人カルテ・強み弱み・自動アドバイス・類似生徒</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="association" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
+        <h3>連関分析</h3>
+        <p>「Aができない子はBもできない」をルール抽出＆ネットワーク化</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="teacher_dashboard" data-requires="1">
+        <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+        <h3>教員ダッシュボード</h3>
+        <p>再指導優先度・クラス比較・要支援生徒一覧</p>
+        <span class="req-tag">考査1つ以上</span>
+      </div>
+      <div class="feature-card disabled" data-analysis="longitudinal" data-requires="2">
+        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+        <h3>縦断比較</h3>
+        <p>1学期→2学期→3学期 の伸び・下降・リスク生徒検出</p>
+        <span class="req-tag">考査2つ以上</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="analysis-section" class="card hidden">
+    <div class="analysis-header">
+      <button class="btn ghost" id="back-btn"><i class="fas fa-arrow-left"></i> 戻る</button>
+      <h2 id="analysis-title">分析</h2>
+    </div>
+    <div id="analysis-content"></div>
+  </section>
+
+  <footer class="footer">
+    <p>© Test Analyzer — based on <a href="https://github.com/itou-daiki/easy_stat_edu" target="_blank">easy_stat_edu</a> architecture.
+       完全クライアントサイド・GitHub Pages対応。</p>
+  </footer>
+</main>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Agent runtime (oh-my-claudecode)
+.omc/
+.serena/
+.cursor/
+.agent/
+.claude/
+
+# Logs / temp
+*.log
+*.tmp
+
+# Node (in case anyone adds tooling later)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Test outputs
+playwright-report/
+test-results/
