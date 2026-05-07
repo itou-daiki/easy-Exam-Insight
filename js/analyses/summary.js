@@ -1,8 +1,8 @@
 // Summary — one-page executive overview across all loaded tests
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=4';
-import { ratioMatrix } from '../loader.js?v=4';
-import { helpBox } from '../help.js?v=4';
+import { el, kpi, plotEl, renderTable, mean, stdev, corr, fmtPct, fmtNum, downloadXLSX } from '../utils.js?v=5';
+import { ratioMatrix } from '../loader.js?v=5';
+import { helpBox } from '../help.js?v=5';
 
 export function render(container, state) {
   const out = el('div');

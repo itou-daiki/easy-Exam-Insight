@@ -1,10 +1,10 @@
 // Clustering — discover learner archetypes
 // =========================================================================
-import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum } from '../utils.js?v=4';
-import { singlePicker } from '../picker.js?v=4';
-import { ratioMatrix } from '../loader.js?v=4';
-import { kmeans, pca2, standardize } from '../ml.js?v=4';
-import { explain, helpBox, howToRead } from '../help.js?v=4';
+import { el, kpi, plotEl, renderTable, mean, fmtPct, fmtNum } from '../utils.js?v=5';
+import { singlePicker } from '../picker.js?v=5';
+import { ratioMatrix } from '../loader.js?v=5';
+import { kmeans, pca2, standardize } from '../ml.js?v=5';
+import { explain, helpBox, howToRead } from '../help.js?v=5';
 
 const PALETTE = ['#1e90ff', '#ef4444', '#10b981', '#f59e0b', '#a855f7', '#ec4899', '#06b6d4', '#84cc16'];
 

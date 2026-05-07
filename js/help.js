@@ -1,6 +1,6 @@
 // Interpretation aid widgets — designed for teachers who aren't statisticians.
 // =========================================================================
-import { el } from './utils.js?v=4';
+import { el } from './utils.js?v=5';
 
 /**
  * Collapsible help block. Closed by default. Click to expand.

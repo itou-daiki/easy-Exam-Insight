@@ -405,6 +405,73 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+/* ===== Toolbar (hero overlay) ===== */
+.toolbar {
+    position: relative;
+    z-index: 2;
+    margin-top: 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.toolbar .btn {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+}
+.toolbar .btn:hover { background: rgba(255, 255, 255, 0.3); }
+.toolbar .btn.active { background: rgba(255, 255, 255, 0.35); border-color: rgba(255, 255, 255, 0.6); }
+.toolbar a.btn:hover { color: #fff; text-decoration: none; }
+
+/* ===== Dark mode ===== */
+html.dark {
+    color-scheme: dark;
+}
+html.dark body {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+html.dark .card,
+html.dark .navigation-section,
+html.dark .footer,
+html.dark .feature-card {
+    background: #1e293b;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+html.dark .card h2 { color: #e2e8f0; }
+html.dark .feature-card.disabled { background: #0f172a; }
+html.dark .muted { color: #94a3b8; }
+html.dark .feature-card h3 { color: #e2e8f0; }
+html.dark .feature-card p { color: #94a3b8; }
+html.dark .upload-area { background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); border-color: #334155; }
+html.dark .upload-area:hover { border-color: var(--primary-color); background: #1e3a5f; }
+html.dark .test-pill { background: linear-gradient(135deg, #1e3a5f, #1e293b); border-color: #2563eb; }
+html.dark .test-pill .pill-title { color: #e2e8f0; }
+html.dark .test-pill .pill-meta { color: #94a3b8; }
+html.dark .table-wrap { border-color: #334155; }
+html.dark .t-table { background: #1e293b; }
+html.dark .t-table th { background: #0f172a; color: #e2e8f0; }
+html.dark .t-table td { color: #e2e8f0; border-color: #334155; }
+html.dark .t-table tbody tr:hover { background: #0f172a; }
+html.dark .kpi { background: linear-gradient(135deg, #1e293b, #0f172a); border-color: #334155; }
+html.dark .help-detail { background: #0c2540; border-color: #1e3a5f; }
+html.dark .help-detail[open] { background: #0c2540; }
+html.dark .help-body p { color: #cbd5e1; }
+html.dark #analysis-content h3 { color: #e2e8f0; }
+html.dark .form-row select,
+html.dark .form-row input { background: #0f172a; color: #e2e8f0; border-color: #334155; }
+html.dark .callout.info { background: #0c2540; color: #93c5fd; border-color: #2563eb; }
+html.dark .callout.success { background: #052e1e; color: #6ee7b7; border-color: #10b981; }
+html.dark .callout.warn { background: #3a2902; color: #fbbf24; border-color: #f59e0b; }
+html.dark .callout.danger { background: #3b0c0c; color: #fca5a5; border-color: #ef4444; }
+html.dark .coach { background: linear-gradient(135deg, #3a2902 0%, #2a1d02 100%); color: #fbbf24; }
+html.dark .btn.ghost { background: #334155; color: #e2e8f0; }
+html.dark .btn.ghost:hover { background: #475569; }
+html.dark .footer-content p { color: #94a3b8; }
+
 /* ===== Footer (easy_stat_edu 完全互換) ===== */
 .footer {
     background: var(--surface);

@@ -1,8 +1,8 @@
 // Data Quality — sanity-check the loaded Excel before analyzing
 // =========================================================================
-import { el, kpi, renderTable, mean, stdev, fmtPct, fmtNum, downloadCSV } from '../utils.js?v=4';
-import { singlePicker } from '../picker.js?v=4';
-import { helpBox } from '../help.js?v=4';
+import { el, kpi, renderTable, mean, stdev, fmtPct, fmtNum, downloadCSV } from '../utils.js?v=5';
+import { singlePicker } from '../picker.js?v=5';
+import { helpBox } from '../help.js?v=5';
 
 export function render(container, state) {
   const wrap = el('div');

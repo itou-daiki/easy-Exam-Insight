@@ -1,10 +1,10 @@
 // Association — discover linked struggle patterns
 // =========================================================================
-import { el, plotEl, renderTable, corr, fmtPct, fmtNum } from '../utils.js?v=4';
-import { singlePicker } from '../picker.js?v=4';
-import { ratioMatrix } from '../loader.js?v=4';
-import { apriori } from '../ml.js?v=4';
-import { helpBox, howToRead, explain } from '../help.js?v=4';
+import { el, plotEl, renderTable, corr, fmtPct, fmtNum } from '../utils.js?v=5';
+import { singlePicker } from '../picker.js?v=5';
+import { ratioMatrix } from '../loader.js?v=5';
+import { apriori } from '../ml.js?v=5';
+import { helpBox, howToRead, explain } from '../help.js?v=5';
 
 export function render(container, state) {
   const wrap = el('div');

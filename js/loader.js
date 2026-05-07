@@ -270,6 +270,44 @@ export function itemLabel(it) {
   return it.name;
 }
 
+// =========================================================================
+// LocalStorage persistence (browser only — data never leaves the device)
+// =========================================================================
+const STORAGE_KEY = 'testAnalyzer.tests.v1';
+
+export function saveTestsToStorage(tests) {
+  try {
+    const serialized = tests.map(t => ({
+      ...t,
+      test_date: t.test_date ? t.test_date.toISOString() : null,
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
+    return true;
+  } catch (e) {
+    console.warn('Failed to save to localStorage:', e);
+    return false;
+  }
+}
+
+export function loadTestsFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return arr.map(t => ({
+      ...t,
+      test_date: t.test_date ? new Date(t.test_date) : null,
+    }));
+  } catch (e) {
+    console.warn('Failed to load from localStorage:', e);
+    return [];
+  }
+}
+
+export function clearStorage() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+}
+
 // ---------- Helpers ----------
 export function valuesOf(td, col) { return td.rows.map(r => r[col]); }
 
